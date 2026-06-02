@@ -107,6 +107,26 @@ Open PowerShell as Administrator and navigate to the DDU directory:
 .\DDU.ps1 -Vendor Intel
 ```
 
+### Module Usage (for integration in larger scripts/packages)
+
+Import the module and call the cleanup function directly:
+
+```powershell
+Import-Module .\DDU.Module.psm1 -Force
+
+$result = Invoke-DDUDriverCleanup `
+    -Vendor NVIDIA `
+    -RemoveAudio `
+    -CleanShaderCache `
+    -CreateRestorePoint `
+    -Force `
+    -NoRestartPrompt
+
+if (-not $result.Success) {
+    throw "DDU cleanup did not complete successfully."
+}
+```
+
 ### Dry Run Mode (Testing)
 
 Test without making any changes:
@@ -151,6 +171,9 @@ Test without making any changes:
 | `-CreateRestorePoint` | Switch | Create System Restore point before cleanup |
 | `-LogPath` | String | Custom log file path (default: auto-generated) |
 | `-Verbose` | Switch | Enable detailed logging output |
+| `-Force` | Switch | Run without interactive confirmation prompt |
+| `-NoRestartPrompt` | Switch | Suppress restart prompt for non-interactive orchestration |
+| `-Restart` | Switch | Restart immediately after successful cleanup |
 
 ## Architecture
 
